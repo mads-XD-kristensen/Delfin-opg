@@ -31,7 +31,7 @@ public class medlem {
     public boolean isPassivAktiv() {
         return passivAktiv;
     }
-
+//hej
     public void setPassivAktiv(boolean passivAktiv) {
         this.passivAktiv = passivAktiv;
     }
