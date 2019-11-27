@@ -40,6 +40,7 @@ public class controller {
         
         medlem medlem = new medlem(stamOpl, alder, passivAktiv);
         
+        
        
         try
                 {
