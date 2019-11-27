@@ -38,8 +38,9 @@ public class controller {
         System.out.println("Skriv \"false\", hvis medlemmet er passivt eller \"true\" hvis medlemmet aktivt");
         passivAktiv = myScan.nextBoolean();
         
-        medlem medlem = new medlem(stamOpl, alder, passivAktiv);
+        //trololololooooo
         
+        medlem medlem = new medlem(stamOpl, alder, passivAktiv);
         
        
         try
