@@ -1,23 +1,64 @@
 
 package dellefin;
 
+
 import java.io.IOException;
 import static java.lang.System.exit;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.sql.*;
 
 
 public class controller {
-    
+    void start() throws SQLException {
+        lavMedlem();
+    }
 
-    public void lavMedlem()
+    public void lavMedlem() throws SQLException
     {
         Scanner myScan = new Scanner(System.in);
-        String s = "";
+        String stamOpl = "";
+        int alder = 0;
+        boolean passivAktiv = false;
         
         
+        
+        
+        System.out.println("Skriv navn, tlfnummer og adresse");
+        stamOpl = myScan.nextLine();
+        
+        System.out.println("Sriv alder (med tal)");
+        alder = myScan.nextInt();
+        
+        //fanger nextInt
+        myScan.nextLine();
+        
+        System.out.println("Skriv \"false\", hvis medlemmet er passivt eller \"true\" hvis medlemmet aktivt");
+        passivAktiv = myScan.nextBoolean();
+        
+        medlem medlem = new medlem(stamOpl, alder, passivAktiv);
+        
+       
+        try
+                {
+                    Connection conn = DataConnector.getConnection();
+                    PreparedStatement stmt = conn.prepareStatement("insert into delfin.Medlem(stamOpl,alder,passivAktiv) values(?,?,?)");
+                    
+                    stmt.setString(1,stamOpl);
+                    stmt.setInt(2, alder);
+                    stmt.setBoolean(3, passivAktiv);
+                   
+                    stmt.executeUpdate();
+                }   
+                catch (SQLException se)
+                {
+                    System.out.println("Det virkede ikke boiii");
+                } 
+
     }
-    
+    /*
     public void getUserInput() throws IOException {
 
         answer = myScan.nextInt();
@@ -155,5 +196,7 @@ public class controller {
                 myUtils.clearConsole();
                 myUtils.printMainMenu();
                 break;
-        }
+        }*/
+
+   
 }
