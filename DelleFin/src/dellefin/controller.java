@@ -22,6 +22,7 @@ public class controller {
         String stamOpl = "";
         int alder = 0;
         boolean passivAktiv = false;
+        boolean MotionKonkurant = false;
         
         
         
@@ -29,7 +30,7 @@ public class controller {
         System.out.println("Skriv navn, tlfnummer og adresse");
         stamOpl = myScan.nextLine();
         
-        System.out.println("Sriv alder (med tal)");
+        System.out.println("Skriv alder (med tal)");
         alder = myScan.nextInt();
         
         //fanger nextInt
@@ -38,19 +39,22 @@ public class controller {
         System.out.println("Skriv \"false\", hvis medlemmet er passivt eller \"true\" hvis medlemmet aktivt");
         passivAktiv = myScan.nextBoolean();
         
-        //trololololooooo 123
+        System.out.println("Skriv \"false\", hvis medlemmet er motionist eller \"true\" hvis medlemmet er konkurrent");
+        MotionKonkurant = myScan.nextBoolean();
         
-        medlem medlem = new medlem(stamOpl, alder, passivAktiv);
+        
+        medlem medlem = new medlem(stamOpl, alder, passivAktiv, MotionKonkurant);
         
        
         try
                 {
                     Connection conn = DataConnector.getConnection();
-                    PreparedStatement stmt = conn.prepareStatement("insert into delfin.Medlem(stamOpl,alder,passivAktiv) values(?,?,?)");
+                    PreparedStatement stmt = conn.prepareStatement("insert into delfin.Medlem(stamOpl,alder,passivAktiv,MotionKonkurant) values(?,?,?,?)");
                     
                     stmt.setString(1,stamOpl);
                     stmt.setInt(2, alder);
                     stmt.setBoolean(3, passivAktiv);
+                    stmt.setBoolean(4, MotionKonkurant);
                    
                     stmt.executeUpdate();
                 }   
@@ -58,7 +62,8 @@ public class controller {
                 {
                     System.out.println("Det virkede ikke boiii");
                 } 
-
+                
+        
     }
     /*
     public void getUserInput() throws IOException {

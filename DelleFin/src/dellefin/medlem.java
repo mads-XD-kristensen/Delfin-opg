@@ -6,11 +6,13 @@ public class medlem {
     //Ændre alder til fødselsdato, hvis der er tid og lyst
     int alder;
     boolean passivAktiv;
+    boolean MotionKonkurant;
 
-    public medlem(String stamOpl, int alder, boolean passivAktiv) {
+    public medlem(String stamOpl, int alder, boolean passivAktiv, boolean MotionKonkurant) {
         this.stamOpl = stamOpl;
         this.alder = alder;
         this.passivAktiv = passivAktiv;
+        this.MotionKonkurant = MotionKonkurant;
     }
     public String getStamOpl() {
         return stamOpl;
@@ -34,6 +36,14 @@ public class medlem {
 //hej
     public void setPassivAktiv(boolean passivAktiv) {
         this.passivAktiv = passivAktiv;
+    }
+
+    public boolean isMotionKonkurant() {
+        return MotionKonkurant;
+    }
+
+    public void setMotionKonkurant(boolean MotionKonkurant) {
+        this.MotionKonkurant = MotionKonkurant;
     }
     
 

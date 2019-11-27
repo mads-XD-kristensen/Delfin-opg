@@ -11,8 +11,8 @@ package dellefin;
  */
 public class motionMedlem extends medlem {
     
-    public motionMedlem(String stamOpl, int alder, boolean passivAktiv) {
-        super(stamOpl, alder, passivAktiv);
+    public motionMedlem(String stamOpl, int alder, boolean passivAktiv, boolean MotionKonkurant) {
+        super(stamOpl, alder, passivAktiv, MotionKonkurant);
     }
     
 }

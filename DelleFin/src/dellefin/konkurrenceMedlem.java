@@ -11,8 +11,8 @@ package dellefin;
  */
 public class konkurrenceMedlem extends medlem {
     
-    public konkurrenceMedlem(String stamOpl, int alder, boolean passivAktiv) {
-        super(stamOpl, alder, passivAktiv);
+    public konkurrenceMedlem(String stamOpl, int alder, boolean passivAktiv, boolean MotionKonkurant) {
+        super(stamOpl, alder, passivAktiv, MotionKonkurant);
     }
     
 }
