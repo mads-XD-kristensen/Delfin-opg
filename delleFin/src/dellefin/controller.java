@@ -18,7 +18,8 @@ public class controller
         //lavMedlem();
 
         //opretResultat();
-        seMedlemmer();
+        
+        //seMedlemmer();
 
         //setMedlemTilPassivAktiv();
         
@@ -26,7 +27,11 @@ public class controller
         
         //setMedlemAlder();
         
-        setMedlemStamOpl(); 
+        //setMedlemStamOpl();
+        
+        //sletMedlem();
+        
+        // virker ikke endnu seTop5(); 
     }
 
     public void lavMedlem() throws SQLException 
@@ -114,9 +119,9 @@ public class controller
 
     public void seMedlemmer() 
     {
-        String url = "jdbc:mysql://localhost:3306/delfin";
+        
         try {
-            Connection conn = DriverManager.getConnection(url, "root", "euy27brq");
+            Connection conn = DataConnector.getConnection();
 
             Statement statement = conn.createStatement();
 
@@ -145,7 +150,7 @@ public class controller
 
         PreparedStatement statement = null;
         try {
-            String url = "jdbc:mysql://localhost:3306/delfin";
+            
 
             Connection conn = DataConnector.getConnection();
 
@@ -305,10 +310,71 @@ public class controller
             Logger.getLogger(controller.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+     public void sletMedlem() 
+    {
+        System.out.println("Skriv ID'et på medlemmet som du vil slette (Dette kan ikke fortrydes!)");
+        Scanner in = new Scanner(System.in);
+        String ID = "";
+        ID = in.nextLine();  
+     
+        PreparedStatement statement = null;
+        try {
+            
+
+            Connection conn = DataConnector.getConnection();
+
+          
+                String sql = "Delete from delfin.Medlem where ID = ?;";
+
+                statement = conn.prepareStatement(sql);
+                
+                
+                statement.setInt(1, Integer.parseInt(ID));
+
+                statement.execute();
+                System.out.println("Medlem: " + ID + " er slettet fra databasen");
+            
+
+        } catch (SQLException ex) {
+            Logger.getLogger(controller.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+     public void seTop5() 
+    {
+        System.out.println("Hvilken svømmedisciplin vil du se top 5 for? (crawl, butterfly, brystsvømning, rygcrawl)");
+         Scanner in = new Scanner(System.in);
+         String s = "";
+         s = in.nextLine();  
+        
+                 PreparedStatement statement = null;
+        try {
+            
+
+            Connection conn = DataConnector.getConnection();
+
+                String sql = "select * from delfin.svømresultat where Svømmedisciplin = ? order by Tid asc limit 5;";
+              
+
+                statement = conn.prepareStatement(sql);
+                
+                
+                statement.setString(1, s);
+
+                statement.execute();
+                System.out.println(sql);
+                
+               
+            
+
+        } catch (SQLException ex) {
+            Logger.getLogger(controller.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    
+    
+    }
 }
 /*
     public void getUserInput() throws IOException {
-
         answer = myScan.nextInt();
         switch (answer) {
             case 1:
@@ -318,7 +384,6 @@ public class controller
                 System.out.println("Press 0 to return to main menu");
                 myUtils.splitDisplay();
                 break;
-
             case 2:
                 listPizzas = new ArrayList<>();
                 this.currentOrder = null;
@@ -331,37 +396,25 @@ public class controller
                     myUtils.splitDisplay();
                     System.out.print("Enter pizza number: ");
                     
-
                     pizzaNo = myScan.nextInt();
-
                     listPizzas.add(pizzaNo);
-
                     myUtils.clearConsole();
-
                     if (pizzaNo >= 1 && pizzaNo <= 14) {
-
                         if (currentOrder == null) {
                             this.currentOrder = new Order(new ArrayList<>(), pickUpTime, customerId);
-
                         }
                         this.currentOrder.getPizzas().add(menuCard.getMenuCard().get(pizzaNo));
-
                     } else {
                         System.out.println("Pizza does not exist in menu card, please press 0 to return to main menu and try again ...");
                         break;
                     }
-
                     if (pizzaNo == 0) {
-
                         myUtils.clearConsole();
-
                         break;
                     }
-
                     // lave database kald, hvor jeg gemmer orderen med pizzaer før jeg nulstiller ordren.
                     // this.currentOrder = null; nulstil orderen
                 }
-
                 if (this.currentOrder != null) {
                     myUtils.clearConsole();
                     System.out.print("Enter a customer id for this order: ");
@@ -371,19 +424,13 @@ public class controller
                     System.out.print("Enter a pick up time: ");
                     pickUpTime = myScan.nextLine();
                     myUtils.clearConsole();
-
                 }
-
                 for (int i = 0; i < currentOrder.getPizzas().size(); i++) {
                     connectOrderDatabase.insertOrder(customerId, listPizzas.get(i), pickUpTime);
-
                 }
-
                 myUtils.clearConsole();
                 myUtils.printMainMenu();
-
                 break;
-
             case 3:
                 myUtils.clearConsole();
                 System.out.println("Customer ID     PizzaName    PickUpTime");
@@ -405,39 +452,28 @@ public class controller
                     myUtils.clearConsole();
                     myUtils.printMainMenu();
                 }
-
                 break;
-
             case 4:
                 myUtils.clearConsole();
                 System.out.println("Customer ID     PizzaName    PickUpTime");
                 connectOrderDatabase.showOrderHistory();
                 System.out.println("\nPress 0 to return to main menu");
                 myUtils.splitDisplay();
-
                 break;
-
             case 5:
                 myUtils.clearConsole();
-
                 System.out.println("Pizza Amount       PizzaName      AmountSold");
                 connectOrderDatabase.Statistics();
                 System.out.println("\nPress 0 to return to main menu");
                 myUtils.splitDisplay();
-
                 break;
-
             case 0:
                 myUtils.clearConsole();
-
                 myUtils.printMainMenu();
-
                 break;
-
             default:
                 if (answer == 9) {
                     myUtils.clearConsole();
-
                     System.out.println("System ending ...");
                     exit(0);
                 }
