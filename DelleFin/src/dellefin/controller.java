@@ -19,7 +19,7 @@ public class controller
 
         //opretResultat();
         
-        //seMedlemmer();
+        seMedlemmer();
 
         //setMedlemTilPassivAktiv();
         
@@ -27,11 +27,11 @@ public class controller
         
         //setMedlemAlder();
         
-        //setMedlemStamOpl();
+        //setMedlemStamOpl(); 
         
         //sletMedlem();
         
-        // virker ikke endnu seTop5(); 
+        //seTop5(); 
     }
 
     public void lavMedlem() throws SQLException 
@@ -119,9 +119,9 @@ public class controller
 
     public void seMedlemmer() 
     {
-        
+        String url = "jdbc:mysql://localhost:3306/delfin";
         try {
-            Connection conn = DataConnector.getConnection();
+            Connection conn = DriverManager.getConnection(url, "root", "euy27brq");
 
             Statement statement = conn.createStatement();
 
@@ -150,7 +150,7 @@ public class controller
 
         PreparedStatement statement = null;
         try {
-            
+            String url = "jdbc:mysql://localhost:3306/delfin";
 
             Connection conn = DataConnector.getConnection();
 
@@ -310,7 +310,7 @@ public class controller
             Logger.getLogger(controller.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-     public void sletMedlem() 
+           public void sletMedlem() 
     {
         System.out.println("Skriv ID'et på medlemmet som du vil slette (Dette kan ikke fortrydes!)");
         Scanner in = new Scanner(System.in);
