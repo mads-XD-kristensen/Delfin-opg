@@ -19,7 +19,7 @@ public class controller
 
         //opretResultat();
         
-        seMedlemmer();
+        //seMedlemmer();
 
         //setMedlemTilPassivAktiv();
         
@@ -31,7 +31,7 @@ public class controller
         
         //sletMedlem();
         
-        //seTop5(); 
+        // virker ikke endnu seTop5(); 
     }
 
     public void lavMedlem() throws SQLException 
