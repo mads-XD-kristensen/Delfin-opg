@@ -18,7 +18,8 @@ public class controller
         //lavMedlem();
 
         //opretResultat();
-        seMedlemmer();
+        
+        //seMedlemmer();
 
         //setMedlemTilPassivAktiv();
         
@@ -26,7 +27,11 @@ public class controller
         
         //setMedlemAlder();
         
-        setMedlemStamOpl(); 
+        //setMedlemStamOpl();
+        
+        //sletMedlem();
+        
+        // virker ikke endnu seTop5(); 
     }
 
     public void lavMedlem() throws SQLException 
@@ -114,9 +119,9 @@ public class controller
 
     public void seMedlemmer() 
     {
-        String url = "jdbc:mysql://localhost:3306/delfin";
+        
         try {
-            Connection conn = DriverManager.getConnection(url, "root", "euy27brq");
+            Connection conn = DataConnector.getConnection();
 
             Statement statement = conn.createStatement();
 
@@ -145,7 +150,7 @@ public class controller
 
         PreparedStatement statement = null;
         try {
-            String url = "jdbc:mysql://localhost:3306/delfin";
+            
 
             Connection conn = DataConnector.getConnection();
 
@@ -304,6 +309,68 @@ public class controller
         } catch (SQLException ex) {
             Logger.getLogger(controller.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+     public void sletMedlem() 
+    {
+        System.out.println("Skriv ID'et på medlemmet som du vil slette (Dette kan ikke fortrydes!)");
+        Scanner in = new Scanner(System.in);
+        String ID = "";
+        ID = in.nextLine();  
+     
+        PreparedStatement statement = null;
+        try {
+            
+
+            Connection conn = DataConnector.getConnection();
+
+          
+                String sql = "Delete from delfin.Medlem where ID = ?;";
+
+                statement = conn.prepareStatement(sql);
+                
+                
+                statement.setInt(1, Integer.parseInt(ID));
+
+                statement.execute();
+                System.out.println("Medlem: " + ID + " er slettet fra databasen");
+            
+
+        } catch (SQLException ex) {
+            Logger.getLogger(controller.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+     public void seTop5() 
+    {
+        System.out.println("Hvilken svømmedisciplin vil du se top 5 for? (crawl, butterfly, brystsvømning, rygcrawl)");
+         Scanner in = new Scanner(System.in);
+         String s = "";
+         s = in.nextLine();  
+        
+                 PreparedStatement statement = null;
+        try {
+            
+
+            Connection conn = DataConnector.getConnection();
+
+                String sql = "select * from delfin.svømresultat where Svømmedisciplin = ? order by Tid asc limit 5;";
+              
+
+                statement = conn.prepareStatement(sql);
+                
+                
+                statement.setString(1, s);
+
+                statement.execute();
+                System.out.println(sql);
+                
+               
+            
+
+        } catch (SQLException ex) {
+            Logger.getLogger(controller.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    
+    
     }
 }
 /*
