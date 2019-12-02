@@ -1,19 +1,20 @@
-
 package dellefin;
 
 public class medlem {
+
     String stamOpl;
-    //Ændre alder til fødselsdato, hvis der er tid og lyst
-    int alder;
+
+    int årgang;
     boolean passivAktiv;
     boolean MotionKonkurant;
 
-    public medlem(String stamOpl, int alder, boolean passivAktiv, boolean MotionKonkurant) {
+    public medlem(String stamOpl, int årgang, boolean passivAktiv, boolean MotionKonkurant) {
         this.stamOpl = stamOpl;
-        this.alder = alder;
+        this.årgang = årgang;
         this.passivAktiv = passivAktiv;
         this.MotionKonkurant = MotionKonkurant;
     }
+
     public String getStamOpl() {
         return stamOpl;
     }
@@ -22,18 +23,18 @@ public class medlem {
         this.stamOpl = stamOpl;
     }
 
-    public int getAlder() {
-        return alder;
+    public int getÅrgang() {
+        return årgang;
     }
 
-    public void setAlder(int alder) {
-        this.alder = alder;
+    public void setÅrgang(int årgang) {
+        this.årgang = årgang;
     }
 
     public boolean isPassivAktiv() {
         return passivAktiv;
     }
-//hej
+
     public void setPassivAktiv(boolean passivAktiv) {
         this.passivAktiv = passivAktiv;
     }
@@ -45,7 +46,5 @@ public class medlem {
     public void setMotionKonkurant(boolean MotionKonkurant) {
         this.MotionKonkurant = MotionKonkurant;
     }
-    
 
-    
 }

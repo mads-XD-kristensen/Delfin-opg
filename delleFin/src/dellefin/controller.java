@@ -10,32 +10,23 @@ import java.sql.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class controller 
-{
+public class controller {
 
-    void start() throws SQLException 
-    {
+    void start() throws SQLException {
         //lavMedlem();
 
         //opretResultat();
-        
         //seMedlemmer();
-
         //setMedlemTilPassivAktiv();
-        
         //setMedlemTilMotionistKonkurrent();
-        
         //setMedlemAlder();
-        
         //setMedlemStamOpl();
-        
         //sletMedlem();
-        
-        // virker ikke endnu seTop5(); 
+        //virker ikke endnu 
+        seTop5();
     }
 
-    public void lavMedlem() throws SQLException 
-    {
+    public void lavMedlem() throws SQLException {
 
         Scanner myScan = new Scanner(System.in);
         String stamOpl = "";
@@ -46,7 +37,7 @@ public class controller
         System.out.println("Skriv navn, tlfnummer og adresse");
         stamOpl = myScan.nextLine();
 
-        System.out.println("Skriv alder (med tal)");
+        System.out.println("Skriv Årgang");
         alder = myScan.nextInt();
 
         //fanger nextInt
@@ -74,8 +65,7 @@ public class controller
         }
     }
 
-    public void opretResultat() 
-    {
+    public void opretResultat() {
         Scanner myScan = new Scanner(System.in);
 
         int Medlem_ID = 0;
@@ -117,9 +107,8 @@ public class controller
 
     }
 
-    public void seMedlemmer() 
-    {
-        
+    public void seMedlemmer() {
+
         try {
             Connection conn = DataConnector.getConnection();
 
@@ -141,8 +130,7 @@ public class controller
 
     }
 
-    public void setMedlemTilPassivAktiv() 
-    {
+    public void setMedlemTilPassivAktiv() {
         System.out.println("Skriv medlemmets ID");
         Scanner in = new Scanner(System.in);
         String ID = "";
@@ -150,7 +138,6 @@ public class controller
 
         PreparedStatement statement = null;
         try {
-            
 
             Connection conn = DataConnector.getConnection();
 
@@ -188,8 +175,7 @@ public class controller
 
     }
 
-    public void setMedlemTilMotionistKonkurrent() 
-    {
+    public void setMedlemTilMotionistKonkurrent() {
         System.out.println("Skriv medlemmets ID");
         Scanner in = new Scanner(System.in);
         String ID = "";
@@ -197,7 +183,6 @@ public class controller
 
         PreparedStatement statement = null;
         try {
-            
 
             Connection conn = DataConnector.getConnection();
 
@@ -207,8 +192,7 @@ public class controller
 
             s = in.nextInt();
 
-            if (s == 1) 
-            {
+            if (s == 1) {
 
                 String sql = "update delfin.medlem set MotionKonkurant = 1 where ID = ?;";
 
@@ -219,8 +203,7 @@ public class controller
                 statement.execute();
                 System.out.println("Medlem: " + ID + " er registreret som konkurrent");
             }
-            if(s == 0) 
-            {
+            if (s == 0) {
 
                 String sql = "update delfin.medlem set MotionKonkurant = 0 where ID = ?;";
 
@@ -236,141 +219,131 @@ public class controller
         }
 
     }
-     public void setMedlemAlder() 
-    {
+
+    public void setMedlemAlder() {
         System.out.println("Skriv medlemmets ID");
         Scanner in = new Scanner(System.in);
         String ID = "";
-        ID = in.nextLine();  
-        
-            System.out.println("Skriv ny alder");
-            String s;
+        ID = in.nextLine();
 
-            s = in.nextLine();
-            
+        System.out.println("Skriv ny alder");
+        String s;
+
+        s = in.nextLine();
+
         PreparedStatement statement = null;
         try {
-            
 
             Connection conn = DataConnector.getConnection();
 
-          
+            String sql = "update delfin.medlem set Alder = ? where ID = ?;";
 
+            statement = conn.prepareStatement(sql);
 
+            statement.setInt(1, Integer.parseInt(s));
+            statement.setInt(2, Integer.parseInt(ID));
 
-                String sql = "update delfin.medlem set Alder = ? where ID = ?;";
-
-                statement = conn.prepareStatement(sql);
-                
-                statement.setInt(1, Integer.parseInt(s));
-                statement.setInt(2, Integer.parseInt(ID));
-
-                statement.execute();
-                System.out.println("Medlem: " + ID + " er registreret som " + s + " år gammel");
-            
+            statement.execute();
+            System.out.println("Medlem: " + ID + " er registreret som " + s + " år gammel");
 
         } catch (SQLException ex) {
             Logger.getLogger(controller.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-      public void setMedlemStamOpl() 
-    {
+
+    public void setMedlemStamOpl() {
         System.out.println("Skriv medlemmets ID");
         Scanner in = new Scanner(System.in);
         String ID = "";
-        ID = in.nextLine();  
-        
-            System.out.println("Skriv nyt navn, telefon nummer og adresse");
-            String s;
+        ID = in.nextLine();
 
-            s = in.nextLine();
-            
+        System.out.println("Skriv nyt navn, telefon nummer og adresse");
+        String s;
+
+        s = in.nextLine();
+
         PreparedStatement statement = null;
         try {
-            
 
             Connection conn = DataConnector.getConnection();
 
-          
+            String sql = "update delfin.medlem set stamOpl = ? where ID = ?;";
 
+            statement = conn.prepareStatement(sql);
 
+            statement.setString(1, s);
+            statement.setInt(2, Integer.parseInt(ID));
 
-                String sql = "update delfin.medlem set stamOpl = ? where ID = ?;";
-
-                statement = conn.prepareStatement(sql);
-                
-                statement.setString(1, s);
-                statement.setInt(2, Integer.parseInt(ID));
-
-                statement.execute();
-                System.out.println("Medlem: " + ID + ", har fået disse nye stam oplysninger: " + s);
-            
+            statement.execute();
+            System.out.println("Medlem: " + ID + ", har fået disse nye stam oplysninger: " + s);
 
         } catch (SQLException ex) {
             Logger.getLogger(controller.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-     public void sletMedlem() 
-    {
+
+    public void sletMedlem() {
         System.out.println("Skriv ID'et på medlemmet som du vil slette (Dette kan ikke fortrydes!)");
         Scanner in = new Scanner(System.in);
         String ID = "";
-        ID = in.nextLine();  
-     
+        ID = in.nextLine();
+
         PreparedStatement statement = null;
         try {
-            
 
             Connection conn = DataConnector.getConnection();
 
-          
-                String sql = "Delete from delfin.Medlem where ID = ?;";
+            String sql = "Delete from delfin.Medlem where ID = ?;";
 
-                statement = conn.prepareStatement(sql);
-                
-                
-                statement.setInt(1, Integer.parseInt(ID));
+            statement = conn.prepareStatement(sql);
 
-                statement.execute();
-                System.out.println("Medlem: " + ID + " er slettet fra databasen");
-            
+            statement.setInt(1, Integer.parseInt(ID));
+
+            statement.execute();
+            System.out.println("Medlem: " + ID + " er slettet fra databasen");
 
         } catch (SQLException ex) {
             Logger.getLogger(controller.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-     public void seTop5() 
-    {
+
+    public void seTop5() {
         System.out.println("Hvilken svømmedisciplin vil du se top 5 for? (crawl, butterfly, brystsvømning, rygcrawl)");
-         Scanner in = new Scanner(System.in);
-         String s = "";
-         s = in.nextLine();  
-        
-                 PreparedStatement statement = null;
+        Scanner in = new Scanner(System.in);
+        String s = "";
+        ResultSet resultset = null;
+        s = in.nextLine();
+
+        PreparedStatement statement = null;
         try {
-            
 
             Connection conn = DataConnector.getConnection();
 
-                String sql = "select * from delfin.svømresultat where Svømmedisciplin = ? order by Tid asc limit 5;";
-              
+            String sql = "select ID, stamOpl, alder, Stævne, tid, svømmedisciplin from svømresultat \n"
+                    + "inner join medlem on medlem.ID = svømresultat.Medlem_ID\n"
+                    + "where Svømmedisciplin = ? \n"
+                    + "order by Tid asc limit 5 ;";
 
-                statement = conn.prepareStatement(sql);
-                
-                
-                statement.setString(1, s);
+            statement = conn.prepareStatement(sql);
 
-                statement.execute();
-                System.out.println(sql);
-                
-               
-            
+            statement.setString(1, s);
+
+            resultset = statement.executeQuery();
+
+            while (resultset.next()) {
+
+                System.out.println("Medlemmets ID: " + resultset.getInt("ID") + "\n"
+                        + "Stam oplysninger: " + resultset.getString("stamOpl") + "\n"
+                        + "Årgang: " + resultset.getInt("alder") + "\n"
+                        + "Stævne: " + resultset.getString("Stævne") + "\n"
+                        + "Tid: " + resultset.getString("Tid") + "\n"
+                        + "Svømmedisciplinen: " + resultset.getString("Svømmedisciplin") + "\n");
+            }
 
         } catch (SQLException ex) {
             Logger.getLogger(controller.class.getName()).log(Level.SEVERE, null, ex);
         }
-    
-    
+
     }
 }
 /*
