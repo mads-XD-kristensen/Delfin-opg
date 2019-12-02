@@ -24,9 +24,7 @@ public class SvømmeResultat {
 
     }
 
-    public SvømmeResultat() {
-    }
-    
-
-   
+//    public SvømmeResultat() {
+//    }
+//    
 }
