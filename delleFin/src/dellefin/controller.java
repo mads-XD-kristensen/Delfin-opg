@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.sql.*;
+import java.time.Year;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -22,8 +23,10 @@ public class controller {
         //setMedlemAlder();
         //setMedlemStamOpl();
         //sletMedlem();
-        //virker ikke endnu 
-        seTop5();
+        //seTop5();
+        //virker ikke endnu:
+        //setBetalStatus();
+        seRestanceOversigt();
     }
 
     public void lavMedlem() throws SQLException {
@@ -33,6 +36,7 @@ public class controller {
         int alder = 0;
         boolean passivAktiv = false;
         boolean MotionKonkurant = false;
+        // boolean betaltStatus = false; -- Skal muligvis benyttes
 
         System.out.println("Skriv navn, tlfnummer og adresse");
         stamOpl = myScan.nextLine();
@@ -120,7 +124,7 @@ public class controller {
 
                 System.out.println("Medlemmets ID: " + resultSet.getInt("ID") + "\n"
                         + "Stam oplysninger: " + resultSet.getString("stamOpl") + "\n"
-                        + "Alder: " + resultSet.getInt("alder") + "\n" + "True hvis aktiv, false hvis passiv: "
+                        + "Årgang: " + resultSet.getInt("alder") + "\n" + "True hvis aktiv, false hvis passiv: "
                         + resultSet.getBoolean("passivAktiv") + "\n" + "True hvis konkurrent, false hvis motionist: " + resultSet.getBoolean("MotionKonkurant") + "\n");
 
             }
@@ -226,7 +230,7 @@ public class controller {
         String ID = "";
         ID = in.nextLine();
 
-        System.out.println("Skriv ny alder");
+        System.out.println("Skriv ny årgang");
         String s;
 
         s = in.nextLine();
@@ -244,7 +248,7 @@ public class controller {
             statement.setInt(2, Integer.parseInt(ID));
 
             statement.execute();
-            System.out.println("Medlem: " + ID + " er registreret som " + s + " år gammel");
+            System.out.println("Medlem: " + ID + " er registreret som værende årgang " + s);
 
         } catch (SQLException ex) {
             Logger.getLogger(controller.class.getName()).log(Level.SEVERE, null, ex);
@@ -345,7 +349,110 @@ public class controller {
         }
 
     }
+
+    public void pengeOversigt() {
+
+        /*
+        pseudo:
+        Metode der kan vise oversigt over folk der er i restance:
+        Hvordan: 
+        boolean på member (betalt/ikke betalt) kasseren kan se og derefter sætte dem "true" hvis der er betalt så de ikke længere
+        har status som værende "i restance" 
+        medlemsliste skal kobles op/sammen med priser iforhold til alder/passiv-aktiv/osv. så der kan foretages forskellige
+        ting iforhold til priser for kontingent.
+        
+        
+        medlemsliste + prisliste * sammenkobling(boolean) = kontingentoversigt/restanceoversigt.
+         */
+    }
+
+    public void setBetalStatus() {
+        System.out.println("Skriv medlemmets ID"); // betalingstatus
+        Scanner in = new Scanner(System.in);
+        String ID = "";
+        ID = in.nextLine();
+
+        PreparedStatement statement = null;
+        try {
+
+            Connection conn = DataConnector.getConnection();
+
+            System.out.println("Skriv \"1\" For at sætte medlemmets betalingstatus til betalt "
+                    + "og \"0\", hvis medlemmet skal sættes i restance.");
+
+            int s = 0;
+
+            s = in.nextInt();
+
+            if (s == 1) {
+
+                String sql = "update delfin.medlem set betalStatus = 1 where ID = ?;";
+
+                statement = conn.prepareStatement(sql);
+
+                statement.setInt(1, Integer.parseInt(ID));
+
+                statement.execute();
+                System.out.println("Medlem: " + ID + " er registreret som betalt");
+            }
+            if (s == 0) {
+
+                String sql = "update delfin.medlem set betalStatus = 0 where ID = ?;";
+
+                statement = conn.prepareStatement(sql);
+
+                statement.setInt(1, Integer.parseInt(ID));
+
+                statement.execute();
+                System.out.println("Medlem: " + ID + " er registreret som værende i restance");
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(controller.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }
+
+    public void seRestanceOversigt() {
+
+        try {
+            Connection conn = DataConnector.getConnection();
+
+            Statement statement = conn.createStatement();
+
+            ResultSet resultSet = statement.executeQuery("SELECT * FROM delfin.medlem where betalStatus = 0");
+
+            while (resultSet.next()) {
+
+                int årstal = Year.now().getValue();
+                double pris = 1600;
+                int alder = resultSet.getInt("alder");
+                boolean passivAktivStatus = resultSet.getBoolean("passivAktiv");
+
+                if (årstal - alder < 18) {
+                    pris = 1000;
+
+                } else if (årstal - alder > 60) {
+                    pris = pris * 0.75;
+
+                }
+                if (!passivAktivStatus == true) {
+                    pris = 500;
+
+                }
+                System.out.println("Medlemmets ID: " + resultSet.getInt("ID") + "\n"
+                        + "Stam oplysninger: " + resultSet.getString("stamOpl") + "\n"
+                        + "Årgang: " + resultSet.getInt("alder") + "\n" + "True hvis aktiv, false hvis passiv: "
+                        + resultSet.getBoolean("passivAktiv") + "\n" + "True hvis konkurrent, false hvis motionist: "
+                        + resultSet.getBoolean("MotionKonkurant") + "\n" + "Mangler at betale: " + pris + "kr." + "\n");
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(controller.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }
+
 }
+
 /*
     public void getUserInput() throws IOException {
         answer = myScan.nextInt();
