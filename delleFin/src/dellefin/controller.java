@@ -14,19 +14,24 @@ import java.util.logging.Logger;
 public class controller {
 
     void start() throws SQLException {
-        //lavMedlem();
-
-        //opretResultat();
-        //seMedlemmer();
-        //setMedlemTilPassivAktiv();
-        //setMedlemTilMotionistKonkurrent();
-        //setMedlemAlder();
-        //setMedlemStamOpl();
-        //sletMedlem();
-        //seTop5();
-        //virker ikke endnu:
+//        lavMedlem();
+//        lavMedlem();
+//        lavMedlem();
+//        lavMedlem();
+//        lavMedlem();
+//        
+        seMedlemmer();
+       opretResultat();
+       
+//        setMedlemTilPassivAktiv();
+//        setMedlemTilMotionistKonkurrent();
+//        setMedlemAlder();
+//        setMedlemStamOpl();
+//        sletMedlem();
+        seTop5();
+        // virker ikke endnu:
         //setBetalStatus();
-        seRestanceOversigt();
+        //seRestanceOversigt();
     }
 
     public void lavMedlem() throws SQLException {
@@ -68,7 +73,7 @@ public class controller {
             System.out.println("Det virkede ikke boiii");
         }
     }
-
+    
     public void opretResultat() {
         Scanner myScan = new Scanner(System.in);
 
@@ -80,7 +85,8 @@ public class controller {
 
         System.out.println("Skriv id");
         Medlem_ID = myScan.nextInt();
-        //fanger nextInt
+        
+//fanger nextInt
         myScan.nextLine();
         System.out.println("Navnet på stævnet");
         Stævne = myScan.nextLine();
@@ -88,10 +94,10 @@ public class controller {
         System.out.println("Placering");
         Placering = myScan.nextLine();
 
-        System.out.println("TId`?");
+        System.out.println("Tid?");
         Tid = myScan.nextLine();
 
-        System.out.println("Hvilken svømmedisciplin?");
+        System.out.println("Hvilken svømmedisciplin? (Crawl, Rygcrawl, Brystsvømning, Butterfly)");
         Svømmedisciplin = myScan.nextLine();
 
         try {
@@ -323,10 +329,7 @@ public class controller {
 
             Connection conn = DataConnector.getConnection();
 
-            String sql = "select ID, stamOpl, alder, Stævne, tid, svømmedisciplin from svømresultat \n"
-                    + "inner join medlem on medlem.ID = svømresultat.Medlem_ID\n"
-                    + "where Svømmedisciplin = ? \n"
-                    + "order by Tid asc limit 5 ;";
+            String sql =  "select m.ID, m.stamOpl, m.alder, s.Stævne, s.medlem_id, s.tid, s.svømid,s.svømmedisciplin from medlem m, svømresultat s where s.Medlem_ID=m.id and s.Svømmedisciplin = ? order by Tid asc limit 5;";
 
             statement = conn.prepareStatement(sql);
 
