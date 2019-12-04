@@ -7,46 +7,99 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.sql.*;
+import java.time.Year;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class controller 
-{
+public class controller {
 
-    void start() throws SQLException 
-    {
-        //lavMedlem();
+    void start() throws SQLException {
 
-        //opretResultat();
-        
-        //seMedlemmer();
+        while (true) {
+            Scanner myScan = new Scanner(System.in);
+            BrugerMeny();
+            int answer = myScan.nextInt();
 
-        //setMedlemTilPassivAktiv();
-        
-        //setMedlemTilMotionistKonkurrent();
-        
-        //setMedlemAlder();
-        
-        //setMedlemStamOpl(); 
-        
-        //sletMedlem();
-        
-        // virker ikke endnu seTop5(); 
+            switch (answer) {
+                case 1:
+
+                    seMedlemmer();
+
+                    break;
+                case 2:
+                    clearConsole();
+                    System.out.println("Oprette medlem tryk 1\nSlem medlem tryk 2\nRedigere alder tryk 3\nRedigere stam oplysninger tryk 4\nRedigere medlems passiv/aktiv status tryk 5\n");
+                    int XD = myScan.nextInt();
+                    switch (XD) {
+                        case 1:
+                            lavMedlem();
+                            break;
+                        case 2:
+                            sletMedlem();
+                            break;
+                        case 3:
+                            setMedlemAlder();
+                            break;
+                        case 4:
+                            setMedlemStamOpl();
+                            break;
+                        case 5:
+                            setMedlemTilPassivAktiv();
+                            break;
+                    }
+
+                    break;
+                case 3:
+
+                    System.out.println("Tryk 1 for at se restance oversigt\nTryk 2 for at ærklere et medlem som betalt");
+                    int XDXD = myScan.nextInt();
+                    switch (XDXD) {
+
+                        case 1:
+                            seRestanceOversigt();
+                            break;
+                        case 2:
+                            setBetalStatus();
+                            break;
+                    }
+                    break;
+                case 4:
+                    seTop5();
+                    break;
+                case 5:
+                    opretResultat();
+                    break;
+
+                default:
+                    if (answer == 9) {
+
+                        System.out.println("System ending ...");
+                        exit(0);
+                    }
+                    break;
+            }
+        }
     }
 
-    public void lavMedlem() throws SQLException 
-    {
+    public void clearConsole() {
+        for (int i = 0; i <= 25; i++) {
+            System.out.println("");
+        }
+    }
+
+    public void lavMedlem() throws SQLException {
 
         Scanner myScan = new Scanner(System.in);
         String stamOpl = "";
         int alder = 0;
         boolean passivAktiv = false;
-        boolean MotionKonkurant = false;
+
+        // boolean betaltStatus = false; -- Skal muligvis benyttes
 
         System.out.println("Skriv navn, tlfnummer og adresse");
         stamOpl = myScan.nextLine();
 
-        System.out.println("Skriv alder (med tal)");
+        System.out.println("Skriv Årgang");
         alder = myScan.nextInt();
 
         //fanger nextInt
@@ -54,28 +107,47 @@ public class controller
 
         System.out.println("Skriv \"false\", hvis medlemmet er passivt eller \"true\" hvis medlemmet aktivt");
         passivAktiv = myScan.nextBoolean();
-
-        System.out.println("Skriv \"false\", hvis medlemmet er motionist eller \"true\" hvis medlemmet er konkurrent");
-        MotionKonkurant = myScan.nextBoolean();
-
-        //medlem medlem = new medlem(stamOpl, alder, passivAktiv, MotionKonkurant);
+        
+        System.out.println("Er medlemmet konkurrent? ja(1)/nej(2)");
+        int trololo = myScan.nextInt();
+        myScan.nextLine();
+        if (trololo == 1){
+            System.out.println("Skriv medlemmets tilknyttede træners navn");
+            String træner = "";
+            træner = myScan.nextLine();
         try {
             Connection conn = DataConnector.getConnection();
-            PreparedStatement stmt = conn.prepareStatement("insert into delfin.Medlem(stamOpl,alder,passivAktiv,MotionKonkurant) values(?,?,?,?)");
+            PreparedStatement stmt = conn.prepareStatement("insert into delfin.Medlem(stamOpl,alder,passivAktiv,træner) values(?,?,?,?)");
 
             stmt.setString(1, stamOpl);
             stmt.setInt(2, alder);
             stmt.setBoolean(3, passivAktiv);
-            stmt.setBoolean(4, MotionKonkurant);
+            stmt.setString(4, træner);
 
             stmt.executeUpdate();
         } catch (SQLException se) {
             System.out.println("Det virkede ikke boiii");
         }
-    }
+        } 
+        else if(trololo == 2) {
+        try {
+            Connection conn = DataConnector.getConnection();
+            PreparedStatement stmt = conn.prepareStatement("insert into delfin.Medlem(stamOpl,alder,passivAktiv,træner) values(?,?,?,?)");
 
-    public void opretResultat() 
-    {
+            stmt.setString(1, stamOpl);
+            stmt.setInt(2, alder);
+            stmt.setBoolean(3, passivAktiv);
+            stmt.setString(4, null);
+
+            stmt.executeUpdate();
+        } catch (SQLException se) {
+            System.out.println("Det virkede ikke boiii");
+        }
+        }
+    }
+    
+    
+    public void opretResultat() {
         Scanner myScan = new Scanner(System.in);
 
         int Medlem_ID = 0;
@@ -86,6 +158,7 @@ public class controller
 
         System.out.println("Skriv id");
         Medlem_ID = myScan.nextInt();
+
         //fanger nextInt
         myScan.nextLine();
         System.out.println("Navnet på stævnet");
@@ -94,10 +167,10 @@ public class controller
         System.out.println("Placering");
         Placering = myScan.nextLine();
 
-        System.out.println("TId`?");
+        System.out.println("Tid?(sek.msek)");
         Tid = myScan.nextLine();
 
-        System.out.println("Hvilken svømmedisciplin?");
+        System.out.println("Hvilken svømmedisciplin? (Crawl, Rygcrawl, Brystsvømning, Butterfly)");
         Svømmedisciplin = myScan.nextLine();
 
         try {
@@ -117,11 +190,10 @@ public class controller
 
     }
 
-    public void seMedlemmer() 
-    {
-        String url = "jdbc:mysql://localhost:3306/delfin";
+    public void seMedlemmer() {
+
         try {
-            Connection conn = DriverManager.getConnection(url, "root", "euy27brq");
+            Connection conn = DataConnector.getConnection();
 
             Statement statement = conn.createStatement();
 
@@ -131,8 +203,8 @@ public class controller
 
                 System.out.println("Medlemmets ID: " + resultSet.getInt("ID") + "\n"
                         + "Stam oplysninger: " + resultSet.getString("stamOpl") + "\n"
-                        + "Alder: " + resultSet.getInt("alder") + "\n" + "True hvis aktiv, false hvis passiv: "
-                        + resultSet.getBoolean("passivAktiv") + "\n" + "True hvis konkurrent, false hvis motionist: " + resultSet.getBoolean("MotionKonkurant") + "\n");
+                        + "Årgang: " + resultSet.getInt("alder") + "\n" + "True hvis aktiv, false hvis passiv: "
+                        + resultSet.getBoolean("passivAktiv") + "\n" + "Træner: " + resultSet.getString("Træner") + "\n");
 
             }
         } catch (SQLException ex) {
@@ -141,8 +213,7 @@ public class controller
 
     }
 
-    public void setMedlemTilPassivAktiv() 
-    {
+    public void setMedlemTilPassivAktiv() {
         System.out.println("Skriv medlemmets ID");
         Scanner in = new Scanner(System.in);
         String ID = "";
@@ -150,7 +221,6 @@ public class controller
 
         PreparedStatement statement = null;
         try {
-            String url = "jdbc:mysql://localhost:3306/delfin";
 
             Connection conn = DataConnector.getConnection();
 
@@ -188,8 +258,7 @@ public class controller
 
     }
 
-    public void setMedlemTilMotionistKonkurrent() 
-    {
+    public void setMedlemTilMotionistKonkurrent() {
         System.out.println("Skriv medlemmets ID");
         Scanner in = new Scanner(System.in);
         String ID = "";
@@ -197,7 +266,6 @@ public class controller
 
         PreparedStatement statement = null;
         try {
-            
 
             Connection conn = DataConnector.getConnection();
 
@@ -207,8 +275,7 @@ public class controller
 
             s = in.nextInt();
 
-            if (s == 1) 
-            {
+            if (s == 1) {
 
                 String sql = "update delfin.medlem set MotionKonkurant = 1 where ID = ?;";
 
@@ -219,8 +286,7 @@ public class controller
                 statement.execute();
                 System.out.println("Medlem: " + ID + " er registreret som konkurrent");
             }
-            if(s == 0) 
-            {
+            if (s == 0) {
 
                 String sql = "update delfin.medlem set MotionKonkurant = 0 where ID = ?;";
 
@@ -236,279 +302,233 @@ public class controller
         }
 
     }
-     public void setMedlemAlder() 
-    {
+
+    public void setMedlemAlder() {
         System.out.println("Skriv medlemmets ID");
         Scanner in = new Scanner(System.in);
         String ID = "";
-        ID = in.nextLine();  
-        
-            System.out.println("Skriv ny alder");
-            String s;
+        ID = in.nextLine();
 
-            s = in.nextLine();
-            
+        System.out.println("Skriv ny årgang");
+        String s;
+
+        s = in.nextLine();
+
         PreparedStatement statement = null;
         try {
-            
 
             Connection conn = DataConnector.getConnection();
 
-          
+            String sql = "update delfin.medlem set Alder = ? where ID = ?;";
 
+            statement = conn.prepareStatement(sql);
 
+            statement.setInt(1, Integer.parseInt(s));
+            statement.setInt(2, Integer.parseInt(ID));
 
-                String sql = "update delfin.medlem set Alder = ? where ID = ?;";
-
-                statement = conn.prepareStatement(sql);
-                
-                statement.setInt(1, Integer.parseInt(s));
-                statement.setInt(2, Integer.parseInt(ID));
-
-                statement.execute();
-                System.out.println("Medlem: " + ID + " er registreret som " + s + " år gammel");
-            
+            statement.execute();
+            System.out.println("Medlem: " + ID + " er registreret som værende årgang " + s);
 
         } catch (SQLException ex) {
             Logger.getLogger(controller.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-      public void setMedlemStamOpl() 
-    {
+
+    public void setMedlemStamOpl() {
         System.out.println("Skriv medlemmets ID");
         Scanner in = new Scanner(System.in);
         String ID = "";
-        ID = in.nextLine();  
-        
-            System.out.println("Skriv nyt navn, telefon nummer og adresse");
-            String s;
+        ID = in.nextLine();
 
-            s = in.nextLine();
-            
+        System.out.println("Skriv nyt navn, telefon nummer og adresse");
+        String s;
+
+        s = in.nextLine();
+
         PreparedStatement statement = null;
         try {
-            
 
             Connection conn = DataConnector.getConnection();
 
-          
+            String sql = "update delfin.medlem set stamOpl = ? where ID = ?;";
 
+            statement = conn.prepareStatement(sql);
 
+            statement.setString(1, s);
+            statement.setInt(2, Integer.parseInt(ID));
 
-                String sql = "update delfin.medlem set stamOpl = ? where ID = ?;";
-
-                statement = conn.prepareStatement(sql);
-                
-                statement.setString(1, s);
-                statement.setInt(2, Integer.parseInt(ID));
-
-                statement.execute();
-                System.out.println("Medlem: " + ID + ", har fået disse nye stam oplysninger: " + s);
-            
+            statement.execute();
+            System.out.println("Medlem: " + ID + ", har fået disse nye stam oplysninger: " + s);
 
         } catch (SQLException ex) {
             Logger.getLogger(controller.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-           public void sletMedlem() 
-    {
+
+    public void sletMedlem() {
         System.out.println("Skriv ID'et på medlemmet som du vil slette (Dette kan ikke fortrydes!)");
         Scanner in = new Scanner(System.in);
         String ID = "";
-        ID = in.nextLine();  
-     
+        ID = in.nextLine();
+
         PreparedStatement statement = null;
         try {
-            
 
             Connection conn = DataConnector.getConnection();
 
-          
-                String sql = "Delete from delfin.Medlem where ID = ?;";
+            String sql = "Delete from delfin.Medlem where ID = ?;";
+
+            statement = conn.prepareStatement(sql);
+
+            statement.setInt(1, Integer.parseInt(ID));
+
+            statement.execute();
+            System.out.println("Medlem: " + ID + " er slettet fra databasen");
+
+        } catch (SQLException ex) {
+            Logger.getLogger(controller.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    public void seTop5() {
+        System.out.println("Hvilken svømmedisciplin vil du se top 5 for? (crawl, butterfly, brystsvømning, rygcrawl)");
+        Scanner in = new Scanner(System.in);
+        String s = "";
+        ResultSet resultset = null;
+        s = in.nextLine();
+
+        PreparedStatement statement = null;
+        try {
+
+            Connection conn = DataConnector.getConnection();
+
+            String sql = "select m.ID, m.stamOpl, m.alder, s.Stævne, s.medlem_id, s.tid, s.svømid,s.svømmedisciplin from medlem m, svømresultat s where s.Medlem_ID=m.id and s.Svømmedisciplin = ? order by Tid asc limit 5;";
+
+            statement = conn.prepareStatement(sql);
+
+            statement.setString(1, s);
+
+            resultset = statement.executeQuery();
+
+            while (resultset.next()) {
+
+                System.out.println("Medlemmets ID: " + resultset.getInt("ID") + "\n"
+                        + "Stam oplysninger: " + resultset.getString("stamOpl") + "\n"
+                        + "Årgang: " + resultset.getInt("alder") + "\n"
+                        + "Stævne: " + resultset.getString("Stævne") + "\n"
+                        + "Tid: " + resultset.getString("Tid") + "\n"
+                        + "Svømmedisciplinen: " + resultset.getString("Svømmedisciplin") + "\n");
+            }
+
+        } catch (SQLException ex) {
+            Logger.getLogger(controller.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }
+
+    public void pengeOversigt() {
+
+        /*
+        pseudo:
+        Metode der kan vise oversigt over folk der er i restance:
+        Hvordan: 
+        boolean på member (betalt/ikke betalt) kasseren kan se og derefter sætte dem "true" hvis der er betalt så de ikke længere
+        har status som værende "i restance" 
+        medlemsliste skal kobles op/sammen med priser iforhold til alder/passiv-aktiv/osv. så der kan foretages forskellige
+        ting iforhold til priser for kontingent.
+        
+        
+        medlemsliste + prisliste * sammenkobling(boolean) = kontingentoversigt/restanceoversigt.
+         */
+    }
+
+    public void setBetalStatus() {
+        System.out.println("Skriv medlemmets ID"); // betalingstatus
+        Scanner in = new Scanner(System.in);
+        String ID = "";
+        ID = in.nextLine();
+
+        PreparedStatement statement = null;
+        try {
+
+            Connection conn = DataConnector.getConnection();
+
+            System.out.println("Skriv \"1\" For at sætte medlemmets betalingstatus til betalt "
+                    + "og \"0\", hvis medlemmet skal sættes i restance.");
+
+            int s = 0;
+
+            s = in.nextInt();
+
+            if (s == 1) {
+
+                String sql = "update delfin.medlem set betalStatus = 1 where ID = ?;";
 
                 statement = conn.prepareStatement(sql);
-                
-                
+
                 statement.setInt(1, Integer.parseInt(ID));
 
                 statement.execute();
-                System.out.println("Medlem: " + ID + " er slettet fra databasen");
-            
+                System.out.println("Medlem: " + ID + " er registreret som betalt");
+            }
+            if (s == 0) {
 
-        } catch (SQLException ex) {
-            Logger.getLogger(controller.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-     public void seTop5() 
-    {
-        System.out.println("Hvilken svømmedisciplin vil du se top 5 for? (crawl, butterfly, brystsvømning, rygcrawl)");
-         Scanner in = new Scanner(System.in);
-         String s = "";
-         s = in.nextLine();  
-        
-                 PreparedStatement statement = null;
-        try {
-            
-
-            Connection conn = DataConnector.getConnection();
-
-                String sql = "select * from delfin.svømresultat where Svømmedisciplin = ? order by Tid asc limit 5;";
-              
+                String sql = "update delfin.medlem set betalStatus = 0 where ID = ?;";
 
                 statement = conn.prepareStatement(sql);
-                
-                
-                statement.setString(1, s);
+
+                statement.setInt(1, Integer.parseInt(ID));
 
                 statement.execute();
-                System.out.println(sql);
-                
-               
-            
-
+                System.out.println("Medlem: " + ID + " er registreret som værende i restance");
+            }
         } catch (SQLException ex) {
             Logger.getLogger(controller.class.getName()).log(Level.SEVERE, null, ex);
         }
-    
-    
+
+    }
+
+    public void seRestanceOversigt() {
+
+        try {
+            Connection conn = DataConnector.getConnection();
+
+            Statement statement = conn.createStatement();
+
+            ResultSet resultSet = statement.executeQuery("SELECT * FROM delfin.medlem where betalStatus = 0");
+
+            while (resultSet.next()) {
+
+                int årstal = Year.now().getValue();
+                double pris = 1600;
+                int alder = resultSet.getInt("alder");
+                boolean passivAktivStatus = resultSet.getBoolean("passivAktiv");
+
+                if (årstal - alder < 18) {
+                    pris = 1000;
+
+                } else if (årstal - alder > 60) {
+                    pris = pris * 0.75;
+
+                }
+                if (!passivAktivStatus == true) {
+                    pris = 500;
+
+                }
+                System.out.println("Medlemmets ID: " + resultSet.getInt("ID") + "\n"
+                        + "Stam oplysninger: " + resultSet.getString("stamOpl") + "\n"
+                        + "Årgang: " + resultSet.getInt("alder") + "\n" + "True hvis aktiv, false hvis passiv: "
+                        + resultSet.getBoolean("passivAktiv") + "\n" + "True hvis konkurrent, false hvis motionist: "
+                        + resultSet.getBoolean("MotionKonkurant") + "\n" + "Mangler at betale: " + pris + "kr." + "\n");
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(controller.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }
+
+    public void BrugerMeny() {
+        System.out.println("Velkommen! \n \nTryk 1 for: Medlems oversigt\nTryk 2 for: Redigere medlem\nTryk 3 for: Se restance meny\nTryk 4 for: Se top 5\nTryk 5 for at oprette et ny svømmeresultat\nTryk 9 for at aflutte programmet");
+
     }
 }
-/*
-    public void getUserInput() throws IOException {
-
-        answer = myScan.nextInt();
-        switch (answer) {
-            case 1:
-                myUtils.clearConsole();
-                ;
-                System.out.println(menuCard.toString());
-                System.out.println("Press 0 to return to main menu");
-                myUtils.splitDisplay();
-                break;
-
-            case 2:
-                listPizzas = new ArrayList<>();
-                this.currentOrder = null;
-                listPizzas.clear();
-                while (true) {
-                    myUtils.clearConsole();
-                    System.out.println(menuCard.toString());
-                    System.out.println("Press 0 to return to main menu\n");
-                    System.out.println("Which pizza from the menu card would you like to add as a order, enter a number 1-14, ");
-                    myUtils.splitDisplay();
-                    System.out.print("Enter pizza number: ");
-                    
-
-                    pizzaNo = myScan.nextInt();
-
-                    listPizzas.add(pizzaNo);
-
-                    myUtils.clearConsole();
-
-                    if (pizzaNo >= 1 && pizzaNo <= 14) {
-
-                        if (currentOrder == null) {
-                            this.currentOrder = new Order(new ArrayList<>(), pickUpTime, customerId);
-
-                        }
-                        this.currentOrder.getPizzas().add(menuCard.getMenuCard().get(pizzaNo));
-
-                    } else {
-                        System.out.println("Pizza does not exist in menu card, please press 0 to return to main menu and try again ...");
-                        break;
-                    }
-
-                    if (pizzaNo == 0) {
-
-                        myUtils.clearConsole();
-
-                        break;
-                    }
-
-                    // lave database kald, hvor jeg gemmer orderen med pizzaer før jeg nulstiller ordren.
-                    // this.currentOrder = null; nulstil orderen
-                }
-
-                if (this.currentOrder != null) {
-                    myUtils.clearConsole();
-                    System.out.print("Enter a customer id for this order: ");
-                    customerId = myScan.nextInt();
-                    myUtils.clearConsole();
-                    myScan.nextLine();
-                    System.out.print("Enter a pick up time: ");
-                    pickUpTime = myScan.nextLine();
-                    myUtils.clearConsole();
-
-                }
-
-                for (int i = 0; i < currentOrder.getPizzas().size(); i++) {
-                    connectOrderDatabase.insertOrder(customerId, listPizzas.get(i), pickUpTime);
-
-                }
-
-                myUtils.clearConsole();
-                myUtils.printMainMenu();
-
-                break;
-
-            case 3:
-                myUtils.clearConsole();
-                System.out.println("Customer ID     PizzaName    PickUpTime");
-                connectOrderDatabase.getCurrentOrders();
-                System.out.println("\nPress 0 to return to main menu");
-                myUtils.splitDisplay();
-                System.out.println("Would you like to remove a order? Press 1");
-                int remove = myScan.nextInt();
-                myUtils.clearConsole();
-                if (remove == 1) {
-                    connectOrderDatabase.getCurrentOrders();
-                    myUtils.splitDisplay();
-                    System.out.println("Enter a customer id");
-                    int customerId = myScan.nextInt();
-                    connectOrderDatabase.updateOrdner(customerId);
-                    myUtils.clearConsole();
-                    myUtils.printMainMenu();
-                } else {
-                    myUtils.clearConsole();
-                    myUtils.printMainMenu();
-                }
-
-                break;
-
-            case 4:
-                myUtils.clearConsole();
-                System.out.println("Customer ID     PizzaName    PickUpTime");
-                connectOrderDatabase.showOrderHistory();
-                System.out.println("\nPress 0 to return to main menu");
-                myUtils.splitDisplay();
-
-                break;
-
-            case 5:
-                myUtils.clearConsole();
-
-                System.out.println("Pizza Amount       PizzaName      AmountSold");
-                connectOrderDatabase.Statistics();
-                System.out.println("\nPress 0 to return to main menu");
-                myUtils.splitDisplay();
-
-                break;
-
-            case 0:
-                myUtils.clearConsole();
-
-                myUtils.printMainMenu();
-
-                break;
-
-            default:
-                if (answer == 9) {
-                    myUtils.clearConsole();
-
-                    System.out.println("System ending ...");
-                    exit(0);
-                }
-                myUtils.clearConsole();
-                myUtils.printMainMenu();
-                break;
-        }*/
