@@ -93,7 +93,7 @@ public class controller {
         String stamOpl = "";
         int alder = 0;
         boolean passivAktiv = false;
-        boolean MotionKonkurant = false;
+
         // boolean betaltStatus = false; -- Skal muligvis benyttes
 
         System.out.println("Skriv navn, tlfnummer og adresse");
@@ -107,26 +107,46 @@ public class controller {
 
         System.out.println("Skriv \"false\", hvis medlemmet er passivt eller \"true\" hvis medlemmet aktivt");
         passivAktiv = myScan.nextBoolean();
-
-        System.out.println("Skriv \"false\", hvis medlemmet er motionist eller \"true\" hvis medlemmet er konkurrent");
-        MotionKonkurant = myScan.nextBoolean();
-
-        //medlem medlem = new medlem(stamOpl, alder, passivAktiv, MotionKonkurant);
+        
+        System.out.println("Er medlemmet konkurrent? ja(1)/nej(2)");
+        int trololo = myScan.nextInt();
+        myScan.nextLine();
+        if (trololo == 1){
+            System.out.println("Skriv medlemmets tilknyttede træners navn");
+            String træner = "";
+            træner = myScan.nextLine();
         try {
             Connection conn = DataConnector.getConnection();
-            PreparedStatement stmt = conn.prepareStatement("insert into delfin.Medlem(stamOpl,alder,passivAktiv,MotionKonkurant) values(?,?,?,?)");
+            PreparedStatement stmt = conn.prepareStatement("insert into delfin.Medlem(stamOpl,alder,passivAktiv,træner) values(?,?,?,?)");
 
             stmt.setString(1, stamOpl);
             stmt.setInt(2, alder);
             stmt.setBoolean(3, passivAktiv);
-            stmt.setBoolean(4, MotionKonkurant);
+            stmt.setString(4, træner);
 
             stmt.executeUpdate();
         } catch (SQLException se) {
             System.out.println("Det virkede ikke boiii");
         }
-    }
+        } 
+        else if(trololo == 2) {
+        try {
+            Connection conn = DataConnector.getConnection();
+            PreparedStatement stmt = conn.prepareStatement("insert into delfin.Medlem(stamOpl,alder,passivAktiv,træner) values(?,?,?,?)");
 
+            stmt.setString(1, stamOpl);
+            stmt.setInt(2, alder);
+            stmt.setBoolean(3, passivAktiv);
+            stmt.setString(4, null);
+
+            stmt.executeUpdate();
+        } catch (SQLException se) {
+            System.out.println("Det virkede ikke boiii");
+        }
+        }
+    }
+    
+    
     public void opretResultat() {
         Scanner myScan = new Scanner(System.in);
 
@@ -139,7 +159,7 @@ public class controller {
         System.out.println("Skriv id");
         Medlem_ID = myScan.nextInt();
 
-//fanger nextInt
+        //fanger nextInt
         myScan.nextLine();
         System.out.println("Navnet på stævnet");
         Stævne = myScan.nextLine();
@@ -147,7 +167,7 @@ public class controller {
         System.out.println("Placering");
         Placering = myScan.nextLine();
 
-        System.out.println("Tid?");
+        System.out.println("Tid?(sek.msek)");
         Tid = myScan.nextLine();
 
         System.out.println("Hvilken svømmedisciplin? (Crawl, Rygcrawl, Brystsvømning, Butterfly)");
@@ -184,7 +204,7 @@ public class controller {
                 System.out.println("Medlemmets ID: " + resultSet.getInt("ID") + "\n"
                         + "Stam oplysninger: " + resultSet.getString("stamOpl") + "\n"
                         + "Årgang: " + resultSet.getInt("alder") + "\n" + "True hvis aktiv, false hvis passiv: "
-                        + resultSet.getBoolean("passivAktiv") + "\n" + "True hvis konkurrent, false hvis motionist: " + resultSet.getBoolean("MotionKonkurant") + "\n");
+                        + resultSet.getBoolean("passivAktiv") + "\n" + "Træner: " + resultSet.getString("Træner") + "\n");
 
             }
         } catch (SQLException ex) {
