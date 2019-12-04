@@ -14,24 +14,77 @@ import java.util.logging.Logger;
 public class controller {
 
     void start() throws SQLException {
-//        lavMedlem();
-//        lavMedlem();
-//        lavMedlem();
-//        lavMedlem();
-//        lavMedlem();
-//        
-        seMedlemmer();
-       opretResultat();
-       
-//        setMedlemTilPassivAktiv();
-//        setMedlemTilMotionistKonkurrent();
-//        setMedlemAlder();
-//        setMedlemStamOpl();
-//        sletMedlem();
-        seTop5();
-        // virker ikke endnu:
-        //setBetalStatus();
-        //seRestanceOversigt();
+
+        while (true) {
+            Scanner myScan = new Scanner(System.in);
+            BrugerMeny();
+            int answer = myScan.nextInt();
+
+            switch (answer) {
+                case 1:
+
+                    seMedlemmer();
+
+                    break;
+                case 2:
+                    clearConsole();
+                    System.out.println("Oprette medlem tryk 1\nSlem medlem tryk 2\nRedigere alder tryk 3\nRedigere stam oplysninger tryk 4\nRedigere medlems passiv/aktiv status tryk 5\n");
+                    int XD = myScan.nextInt();
+                    switch (XD) {
+                        case 1:
+                            lavMedlem();
+                            break;
+                        case 2:
+                            sletMedlem();
+                            break;
+                        case 3:
+                            setMedlemAlder();
+                            break;
+                        case 4:
+                            setMedlemStamOpl();
+                            break;
+                        case 5:
+                            setMedlemTilPassivAktiv();
+                            break;
+                    }
+
+                    break;
+                case 3:
+
+                    System.out.println("Tryk 1 for at se restance oversigt\nTryk 2 for at ærklere et medlem som betalt");
+                    int XDXD = myScan.nextInt();
+                    switch (XDXD) {
+
+                        case 1:
+                            seRestanceOversigt();
+                            break;
+                        case 2:
+                            setBetalStatus();
+                            break;
+                    }
+                    break;
+                case 4:
+                    seTop5();
+                    break;
+                case 5:
+                    opretResultat();
+                    break;
+
+                default:
+                    if (answer == 9) {
+
+                        System.out.println("System ending ...");
+                        exit(0);
+                    }
+                    break;
+            }
+        }
+    }
+
+    public void clearConsole() {
+        for (int i = 0; i <= 25; i++) {
+            System.out.println("");
+        }
     }
 
     public void lavMedlem() throws SQLException {
@@ -73,7 +126,7 @@ public class controller {
             System.out.println("Det virkede ikke boiii");
         }
     }
-    
+
     public void opretResultat() {
         Scanner myScan = new Scanner(System.in);
 
@@ -85,7 +138,7 @@ public class controller {
 
         System.out.println("Skriv id");
         Medlem_ID = myScan.nextInt();
-        
+
 //fanger nextInt
         myScan.nextLine();
         System.out.println("Navnet på stævnet");
@@ -329,7 +382,7 @@ public class controller {
 
             Connection conn = DataConnector.getConnection();
 
-            String sql =  "select m.ID, m.stamOpl, m.alder, s.Stævne, s.medlem_id, s.tid, s.svømid,s.svømmedisciplin from medlem m, svømresultat s where s.Medlem_ID=m.id and s.Svømmedisciplin = ? order by Tid asc limit 5;";
+            String sql = "select m.ID, m.stamOpl, m.alder, s.Stævne, s.medlem_id, s.tid, s.svømid,s.svømmedisciplin from medlem m, svømresultat s where s.Medlem_ID=m.id and s.Svømmedisciplin = ? order by Tid asc limit 5;";
 
             statement = conn.prepareStatement(sql);
 
@@ -454,113 +507,8 @@ public class controller {
 
     }
 
-}
+    public void BrugerMeny() {
+        System.out.println("Velkommen! \n \nTryk 1 for: Medlems oversigt\nTryk 2 for: Redigere medlem\nTryk 3 for: Se restance meny\nTryk 4 for: Se top 5\nTryk 5 for at oprette et ny svømmeresultat\nTryk 9 for at aflutte programmet");
 
-/*
-    public void getUserInput() throws IOException {
-        answer = myScan.nextInt();
-        switch (answer) {
-            case 1:
-                myUtils.clearConsole();
-                ;
-                System.out.println(menuCard.toString());
-                System.out.println("Press 0 to return to main menu");
-                myUtils.splitDisplay();
-                break;
-            case 2:
-                listPizzas = new ArrayList<>();
-                this.currentOrder = null;
-                listPizzas.clear();
-                while (true) {
-                    myUtils.clearConsole();
-                    System.out.println(menuCard.toString());
-                    System.out.println("Press 0 to return to main menu\n");
-                    System.out.println("Which pizza from the menu card would you like to add as a order, enter a number 1-14, ");
-                    myUtils.splitDisplay();
-                    System.out.print("Enter pizza number: ");
-                    
-                    pizzaNo = myScan.nextInt();
-                    listPizzas.add(pizzaNo);
-                    myUtils.clearConsole();
-                    if (pizzaNo >= 1 && pizzaNo <= 14) {
-                        if (currentOrder == null) {
-                            this.currentOrder = new Order(new ArrayList<>(), pickUpTime, customerId);
-                        }
-                        this.currentOrder.getPizzas().add(menuCard.getMenuCard().get(pizzaNo));
-                    } else {
-                        System.out.println("Pizza does not exist in menu card, please press 0 to return to main menu and try again ...");
-                        break;
-                    }
-                    if (pizzaNo == 0) {
-                        myUtils.clearConsole();
-                        break;
-                    }
-                    // lave database kald, hvor jeg gemmer orderen med pizzaer før jeg nulstiller ordren.
-                    // this.currentOrder = null; nulstil orderen
-                }
-                if (this.currentOrder != null) {
-                    myUtils.clearConsole();
-                    System.out.print("Enter a customer id for this order: ");
-                    customerId = myScan.nextInt();
-                    myUtils.clearConsole();
-                    myScan.nextLine();
-                    System.out.print("Enter a pick up time: ");
-                    pickUpTime = myScan.nextLine();
-                    myUtils.clearConsole();
-                }
-                for (int i = 0; i < currentOrder.getPizzas().size(); i++) {
-                    connectOrderDatabase.insertOrder(customerId, listPizzas.get(i), pickUpTime);
-                }
-                myUtils.clearConsole();
-                myUtils.printMainMenu();
-                break;
-            case 3:
-                myUtils.clearConsole();
-                System.out.println("Customer ID     PizzaName    PickUpTime");
-                connectOrderDatabase.getCurrentOrders();
-                System.out.println("\nPress 0 to return to main menu");
-                myUtils.splitDisplay();
-                System.out.println("Would you like to remove a order? Press 1");
-                int remove = myScan.nextInt();
-                myUtils.clearConsole();
-                if (remove == 1) {
-                    connectOrderDatabase.getCurrentOrders();
-                    myUtils.splitDisplay();
-                    System.out.println("Enter a customer id");
-                    int customerId = myScan.nextInt();
-                    connectOrderDatabase.updateOrdner(customerId);
-                    myUtils.clearConsole();
-                    myUtils.printMainMenu();
-                } else {
-                    myUtils.clearConsole();
-                    myUtils.printMainMenu();
-                }
-                break;
-            case 4:
-                myUtils.clearConsole();
-                System.out.println("Customer ID     PizzaName    PickUpTime");
-                connectOrderDatabase.showOrderHistory();
-                System.out.println("\nPress 0 to return to main menu");
-                myUtils.splitDisplay();
-                break;
-            case 5:
-                myUtils.clearConsole();
-                System.out.println("Pizza Amount       PizzaName      AmountSold");
-                connectOrderDatabase.Statistics();
-                System.out.println("\nPress 0 to return to main menu");
-                myUtils.splitDisplay();
-                break;
-            case 0:
-                myUtils.clearConsole();
-                myUtils.printMainMenu();
-                break;
-            default:
-                if (answer == 9) {
-                    myUtils.clearConsole();
-                    System.out.println("System ending ...");
-                    exit(0);
-                }
-                myUtils.clearConsole();
-                myUtils.printMainMenu();
-                break;
-        }*/
+    }
+}
