@@ -15,33 +15,6 @@ public class medlem{
         this.passivAktiv = passivAktiv;
    
     }
-    
-    
-
-    public String getStamOpl() {
-        return stamOpl;
-    }
-
-    public void setStamOpl(String stamOpl) {
-        this.stamOpl = stamOpl;
-    }
-
-    public int getÅrgang() {
-        return årgang;
-    }
-
-    public void setÅrgang(int årgang) {
-        this.årgang = årgang;
-    }
-
-    public boolean isPassivAktiv() {
-        return passivAktiv;
-    }
-
-    public void setPassivAktiv(boolean passivAktiv) {
-        this.passivAktiv = passivAktiv;
-    }
-
 
 
 }

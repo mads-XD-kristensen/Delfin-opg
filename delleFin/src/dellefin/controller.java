@@ -28,7 +28,7 @@ public class controller {
                     break;
                 case 2:
                     clearConsole();
-                    System.out.println("Oprette medlem tryk 1\nSlem medlem tryk 2\nRedigere alder tryk 3\nRedigere stam oplysninger tryk 4\nRedigere medlems passiv/aktiv status tryk 5\n");
+                    System.out.println("Oprette medlem tryk 1\nSlem medlem tryk 2\nRedigere alder tryk 3\nRedigere stam oplysninger tryk 4\nRedigere medlems passiv/aktiv status tryk 5\nGør medlem til konkurrent eller skift et medlems træner - tryk 6 \n");
                     int XD = myScan.nextInt();
                     switch (XD) {
                         case 1:
@@ -46,6 +46,9 @@ public class controller {
                         case 5:
                             setMedlemTilPassivAktiv();
                             break;
+                        case 6:
+                        setMedlemKonkurrent();
+                        break;
                     }
 
                     break;
@@ -64,7 +67,11 @@ public class controller {
                     }
                     break;
                 case 4:
-                    seTop5();
+                    System.out.println("Top 5 senior 2019");
+                    seTop5Senior();
+                    System.out.println("");
+                    System.out.println("Top 5 Junior 2019");
+                    seTop5Junior();
                     break;
                 case 5:
                     opretResultat();
@@ -255,7 +262,7 @@ public class controller {
 
     }
 
-    public void setMedlemTilMotionistKonkurrent() {
+    public void setMedlemKonkurrent() {
         System.out.println("Skriv medlemmets ID");
         Scanner in = new Scanner(System.in);
         String ID = "";
@@ -266,34 +273,24 @@ public class controller {
 
             Connection conn = DataConnector.getConnection();
 
-            System.out.println("Skriv \"1\" hvis hvis du vil gøre medlemmet til en konkurrent og \"0\", hvis medlemmet skal gøres til motionist.");
+            System.out.println("Skriv navnet på medlemmets træner");
 
-            int s;
+            String s;
 
-            s = in.nextInt();
+            s = in.nextLine();
 
-            if (s == 1) {
+            
 
-                String sql = "update delfin.medlem set MotionKonkurant = 1 where ID = ?;";
+                String sql = "update delfin.medlem set træner = ? where ID = ?;";
 
                 statement = conn.prepareStatement(sql);
 
-                statement.setInt(1, Integer.parseInt(ID));
+                statement.setString(1, s);
+                statement.setInt(2, Integer.parseInt(ID));
 
                 statement.execute();
                 System.out.println("Medlem: " + ID + " er registreret som konkurrent");
-            }
-            if (s == 0) {
-
-                String sql = "update delfin.medlem set MotionKonkurant = 0 where ID = ?;";
-
-                statement = conn.prepareStatement(sql);
-
-                statement.setInt(1, Integer.parseInt(ID));
-
-                statement.execute();
-                System.out.println("Medlem: " + ID + " er registreret som motionist");
-            }
+          
         } catch (SQLException ex) {
             Logger.getLogger(controller.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -387,7 +384,7 @@ public class controller {
         }
     }
 
-    public void seTop5() {
+    public void seTop5Senior() {
         System.out.println("Hvilken svømmedisciplin vil du se top 5 for? (crawl, butterfly, brystsvømning, rygcrawl)");
         Scanner in = new Scanner(System.in);
         String s = "";
@@ -399,7 +396,43 @@ public class controller {
 
             Connection conn = DataConnector.getConnection();
 
-            String sql = "select m.ID, m.stamOpl, m.alder, s.Stævne, s.medlem_id, s.tid, s.svømid,s.svømmedisciplin from medlem m, svømresultat s where s.Medlem_ID=m.id and s.Svømmedisciplin = ? order by Tid asc limit 5;";
+            String sql = "select m.ID, m.stamOpl, m.alder, s.Stævne, s.medlem_id, s.tid, s.svømid,s.svømmedisciplin from medlem m, svømresultat s where s.Medlem_ID=m.id and alder < 2001 and s.Svømmedisciplin = \"crawl\" order by Tid asc limit 5;";
+
+            statement = conn.prepareStatement(sql);
+
+            statement.setString(1, s);
+
+            resultset = statement.executeQuery();
+
+            while (resultset.next()) {
+
+                System.out.println("Medlemmets ID: " + resultset.getInt("ID") + "\n"
+                        + "Stam oplysninger: " + resultset.getString("stamOpl") + "\n"
+                        + "Årgang: " + resultset.getInt("alder") + "\n"
+                        + "Stævne: " + resultset.getString("Stævne") + "\n"
+                        + "Tid: " + resultset.getString("Tid") + "\n"
+                        + "Svømmedisciplinen: " + resultset.getString("Svømmedisciplin") + "\n");
+            }
+
+        } catch (SQLException ex) {
+            Logger.getLogger(controller.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }
+    
+    public void seTop5Junior() {
+        System.out.println("Hvilken svømmedisciplin vil du se top 5 for? (crawl, butterfly, brystsvømning, rygcrawl)");
+        Scanner in = new Scanner(System.in);
+        String s = "";
+        ResultSet resultset = null;
+        s = in.nextLine();
+
+        PreparedStatement statement = null;
+        try {
+
+            Connection conn = DataConnector.getConnection();
+
+            String sql = "select m.ID, m.stamOpl, m.alder, s.Stævne, s.medlem_id, s.tid, s.svømid,s.svømmedisciplin from medlem m, svømresultat s where s.Medlem_ID=m.id and alder > 2001 and s.Svømmedisciplin = \"crawl\" order by Tid asc limit 5;";
 
             statement = conn.prepareStatement(sql);
 
