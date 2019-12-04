@@ -94,59 +94,56 @@ public class controller {
         int alder = 0;
         boolean passivAktiv = false;
 
-        // boolean betaltStatus = false; -- Skal muligvis benyttes
-
+        
         System.out.println("Skriv navn, tlfnummer og adresse");
         stamOpl = myScan.nextLine();
 
         System.out.println("Skriv Årgang");
         alder = myScan.nextInt();
 
-        //fanger nextInt
+        //fanger nextInt for at forhindre scanner buggen
         myScan.nextLine();
 
         System.out.println("Skriv \"false\", hvis medlemmet er passivt eller \"true\" hvis medlemmet aktivt");
         passivAktiv = myScan.nextBoolean();
-        
+
         System.out.println("Er medlemmet konkurrent? ja(1)/nej(2)");
         int trololo = myScan.nextInt();
         myScan.nextLine();
-        if (trololo == 1){
+        if (trololo == 1) {
             System.out.println("Skriv medlemmets tilknyttede træners navn");
             String træner = "";
             træner = myScan.nextLine();
-        try {
-            Connection conn = DataConnector.getConnection();
-            PreparedStatement stmt = conn.prepareStatement("insert into delfin.Medlem(stamOpl,alder,passivAktiv,træner) values(?,?,?,?)");
+            try {
+                Connection conn = DataConnector.getConnection();
+                PreparedStatement stmt = conn.prepareStatement("insert into delfin.Medlem(stamOpl,alder,passivAktiv,træner) values(?,?,?,?)");
 
-            stmt.setString(1, stamOpl);
-            stmt.setInt(2, alder);
-            stmt.setBoolean(3, passivAktiv);
-            stmt.setString(4, træner);
+                stmt.setString(1, stamOpl);
+                stmt.setInt(2, alder);
+                stmt.setBoolean(3, passivAktiv);
+                stmt.setString(4, træner);
 
-            stmt.executeUpdate();
-        } catch (SQLException se) {
-            System.out.println("Det virkede ikke boiii");
-        }
-        } 
-        else if(trololo == 2) {
-        try {
-            Connection conn = DataConnector.getConnection();
-            PreparedStatement stmt = conn.prepareStatement("insert into delfin.Medlem(stamOpl,alder,passivAktiv,træner) values(?,?,?,?)");
+                stmt.executeUpdate();
+            } catch (SQLException se) {
+                System.out.println("Det virkede ikke boiii");
+            }
+        } else if (trololo == 2) {
+            try {
+                Connection conn = DataConnector.getConnection();
+                PreparedStatement stmt = conn.prepareStatement("insert into delfin.Medlem(stamOpl,alder,passivAktiv,træner) values(?,?,?,?)");
 
-            stmt.setString(1, stamOpl);
-            stmt.setInt(2, alder);
-            stmt.setBoolean(3, passivAktiv);
-            stmt.setString(4, null);
+                stmt.setString(1, stamOpl);
+                stmt.setInt(2, alder);
+                stmt.setBoolean(3, passivAktiv);
+                stmt.setString(4, null);
 
-            stmt.executeUpdate();
-        } catch (SQLException se) {
-            System.out.println("Det virkede ikke boiii");
-        }
+                stmt.executeUpdate();
+            } catch (SQLException se) {
+                System.out.println("Det virkede ikke boiii");
+            }
         }
     }
-    
-    
+
     public void opretResultat() {
         Scanner myScan = new Scanner(System.in);
 
@@ -426,21 +423,6 @@ public class controller {
 
     }
 
-    public void pengeOversigt() {
-
-        /*
-        pseudo:
-        Metode der kan vise oversigt over folk der er i restance:
-        Hvordan: 
-        boolean på member (betalt/ikke betalt) kasseren kan se og derefter sætte dem "true" hvis der er betalt så de ikke længere
-        har status som værende "i restance" 
-        medlemsliste skal kobles op/sammen med priser iforhold til alder/passiv-aktiv/osv. så der kan foretages forskellige
-        ting iforhold til priser for kontingent.
-        
-        
-        medlemsliste + prisliste * sammenkobling(boolean) = kontingentoversigt/restanceoversigt.
-         */
-    }
 
     public void setBetalStatus() {
         System.out.println("Skriv medlemmets ID"); // betalingstatus
@@ -518,8 +500,7 @@ public class controller {
                 System.out.println("Medlemmets ID: " + resultSet.getInt("ID") + "\n"
                         + "Stam oplysninger: " + resultSet.getString("stamOpl") + "\n"
                         + "Årgang: " + resultSet.getInt("alder") + "\n" + "True hvis aktiv, false hvis passiv: "
-                        + resultSet.getBoolean("passivAktiv") + "\n" + "True hvis konkurrent, false hvis motionist: "
-                        + resultSet.getBoolean("MotionKonkurant") + "\n" + "Mangler at betale: " + pris + "kr." + "\n");
+                        + resultSet.getBoolean("passivAktiv") + "\n" +  "Mangler at betale: " + pris + "kr." + "\n");
             }
         } catch (SQLException ex) {
             Logger.getLogger(controller.class.getName()).log(Level.SEVERE, null, ex);
