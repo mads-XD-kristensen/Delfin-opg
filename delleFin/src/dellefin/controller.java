@@ -32,7 +32,7 @@ public class controller {
 
                 case 2:
                     myUtils.clearConsole();
-                    System.out.println("Oprette medlem tryk 1\nSlem medlem tryk 2\nRedigere alder tryk 3\nRedigere stam oplysninger tryk 4\nRedigere medlems passiv/aktiv status tryk 5\nGør medlem til konkurrent eller skift et medlems træner - tryk 6 \n");
+                    System.out.println("Oprette medlem tryk 1\nSlet medlem tryk 2\nRedigere alder tryk 3\nRedigere stam oplysninger tryk 4\nRedigere medlems passiv/aktiv status tryk 5\nGør medlem til konkurrent eller skift et medlems træner - tryk 6 \n");
                     int submenu1 = myScan.nextInt();
 
                     switch (submenu1) {
@@ -42,22 +42,27 @@ public class controller {
                             break;
 
                         case 2:
+                            formand.seMedlemmer();
                             formand.sletMedlem();
                             break;
 
                         case 3:
+                            formand.seMedlemmer();
                             formand.setMedlemAlder();
                             break;
 
                         case 4:
+                            formand.seMedlemmer();
                             formand.setMedlemStamOpl();
                             break;
 
                         case 5:
+                            formand.seMedlemmer();
                             formand.setMedlemTilPassivAktiv();
                             break;
 
                         case 6:
+                            formand.seMedlemmer();
                             formand.setMedlemKonkurrent();
                             break;
                     }

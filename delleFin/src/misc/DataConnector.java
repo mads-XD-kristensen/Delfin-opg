@@ -15,7 +15,7 @@ public class DataConnector {
         Connection conn = null;
 
         try {
-            conn = DriverManager.getConnection(url, "root", "uqt42vqx");
+            conn = DriverManager.getConnection(url, "root", "Soldath123");
         } catch (SQLException ex) {
             Logger.getLogger(DataConnector.class.getName()).log(Level.SEVERE, null, ex);
         }

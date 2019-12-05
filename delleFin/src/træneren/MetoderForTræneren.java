@@ -68,7 +68,7 @@ public class MetoderForTræneren {
 
             Connection conn = DataConnector.getConnection();
 
-            String sql = "select m.ID, m.stamOpl, m.alder, s.Stævne, s.medlem_id, s.tid, s.svømid,s.svømmedisciplin from medlem m, svømresultat s where s.Medlem_ID=m.id and alder < 2001 and s.Svømmedisciplin = \"crawl\" order by Tid asc limit 5;";
+            String sql = "select m.ID, m.stamOpl, m.alder, s.Stævne, s.medlem_id, s.tid, s.svømid,s.svømmedisciplin from medlem m, svømresultat s where s.Medlem_ID=m.id and alder < 2001 and s.Svømmedisciplin = ? order by Tid asc limit 5;";
 
             statement = conn.prepareStatement(sql);
 
@@ -104,7 +104,7 @@ public class MetoderForTræneren {
 
             Connection conn = DataConnector.getConnection();
 
-            String sql = "select m.ID, m.stamOpl, m.alder, s.Stævne, s.medlem_id, s.tid, s.svømid,s.svømmedisciplin from medlem m, svømresultat s where s.Medlem_ID=m.id and alder > 2001 and s.Svømmedisciplin = \"crawl\" order by Tid asc limit 5;";
+            String sql = "select m.ID, m.stamOpl, m.alder, s.Stævne, s.medlem_id, s.tid, s.svømid,s.svømmedisciplin from medlem m, svømresultat s where s.Medlem_ID=m.id and alder > 2001 and s.Svømmedisciplin = ? order by Tid asc limit 5;";
 
             statement = conn.prepareStatement(sql);
 

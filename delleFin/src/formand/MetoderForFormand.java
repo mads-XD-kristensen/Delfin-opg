@@ -20,7 +20,7 @@ public class MetoderForFormand {
         String stamOpl = "";
         int alder = 0;
         boolean passivAktiv = false;
-        int trololo = myScan.nextInt();
+        
 
         System.out.println("Skriv navn, tlfnummer og adresse");
         stamOpl = myScan.nextLine();
@@ -35,9 +35,9 @@ public class MetoderForFormand {
         passivAktiv = myScan.nextBoolean();
 
         System.out.println("Er medlemmet konkurrent? ja(1)/nej(2)");
-
+        int trololo = myScan.nextInt();
         myScan.nextLine();
-
+        
         if (trololo == 1) {
             System.out.println("Skriv medlemmets tilknyttede træners navn");
             String træner = "";
