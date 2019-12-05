@@ -1,4 +1,6 @@
-package dellefin;
+package formand;
+
+
 
 public class Konkurrent extends medlem {
 

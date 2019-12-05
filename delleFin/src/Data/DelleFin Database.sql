@@ -1,52 +1,54 @@
--- MySQL dump 10.13  Distrib 8.0.18, for Win64 (x86_64)
---
--- Host: localhost    Database: delfin
--- ------------------------------------------------------
--- Server version	8.0.18
+create database Delfin;
+use Delfin;
 
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!50503 SET NAMES utf8 */;
-/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
-/*!40103 SET TIME_ZONE='+00:00' */;
-/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
-/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
-/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
-/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+CREATE TABLE Medlem (
+  ID int NOT NULL AUTO_INCREMENT,
+  stamOpl varchar(150) NOT NULL,
+  Alder int(120) NOT NULL,
+  passivAktiv boolean NOT NULL,
+  BetalStatus boolean not null default false,
+  træner varchar(69),
+  PRIMARY KEY (ID));
 
---
--- Table structure for table `medlem`
---
+  create table SvømResultat(
+ Medlem_ID int not null,
+ Stævne varchar(50) not null,
+ Placering varchar(50) not null,
+ Tid varchar(50) not null, 
+ Svømmedisciplin varchar(50) not null,
+ svømID int auto_increment,
+ primary key (svømID));
+ 
+ 
+insert into medlem ( stamopl, alder, passivAktiv, BetalStatus, træner) values ( "Mads Kristensen", "1997", true, true, null);
+insert into medlem ( stamopl, alder, passivAktiv, BetalStatus, træner) values ( "Jonas Mik", "1996", false, true, null);
+insert into medlem ( stamopl, alder, passivAktiv, BetalStatus, træner) values ( "Mads Overgaard ", "1997", true, false, "Jens");
+insert into medlem ( stamopl, alder, passivAktiv, BetalStatus, træner) values ( "Albert Sylvester", "2006", true, true, "Jens");
+insert into medlem ( stamopl, alder, passivAktiv, BetalStatus, træner) values ( "Daniel Bisgaard", "2005", false, false, "Jens");
+insert into medlem ( stamopl, alder, passivAktiv, BetalStatus, træner) values ( "Bent Bentsen", "1963", false, false, null);
+insert into medlem ( stamopl, alder, passivAktiv, BetalStatus, træner) values ( "Simone Simonsen", "1976", false, true, null);
+insert into medlem ( stamopl, alder, passivAktiv, BetalStatus, træner) values ( "Søren Sørensen", "2010", true, false, "Jens");
+insert into medlem ( stamopl, alder, passivAktiv, BetalStatus, træner) values ( "Mads Madsen", "2008", true, true, "Jens");
+insert into medlem ( stamopl, alder, passivAktiv, BetalStatus, træner) values ( "Lars Larsen", "2002", false, true, null);
 
-DROP TABLE IF EXISTS `medlem`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `medlem` (
-  `ID` int(11) NOT NULL AUTO_INCREMENT,
-  `stamOpl` varchar(150) NOT NULL,
-  `Alder` int(120) NOT NULL,
-  `passivAktiv` tinyint(1) NOT NULL,
-  PRIMARY KEY (`ID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `medlem`
---
-
-LOCK TABLES `medlem` WRITE;
-/*!40000 ALTER TABLE `medlem` DISABLE KEYS */;
-/*!40000 ALTER TABLE `medlem` ENABLE KEYS */;
-UNLOCK TABLES;
-/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
-
-/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
-/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
-/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
-/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
-
--- Dump completed on 2019-11-26 14:26:33
+insert into svømresultat (medlem_id, stævne, placering, tid, svømmedisciplin) values ( 1, "OL", "Første", "14.34", "Crawl"); 
+insert into svømresultat (medlem_id, stævne, placering, tid, svømmedisciplin) values ( 2, "Tredje OL qualifier", "Tredje", "30.4", "Crawl"); 
+insert into svømresultat (medlem_id, stævne, placering, tid, svømmedisciplin) values ( 3, "Stævnet", "Anden", "14.35", "Crawl"); 
+insert into svømresultat (medlem_id, stævne, placering, tid, svømmedisciplin) values ( 4, "Ølby ølsvømmestævne", "Ottende", "1.32", "Crawl"); 
+insert into svømresultat (medlem_id, stævne, placering, tid, svømmedisciplin) values ( 5, "Vandløse svømmestævne", "Første", "45.43", "Crawl"); 
+insert into svømresultat (medlem_id, stævne, placering, tid, svømmedisciplin) values (6, "OL", "Femte", "14.76", "Crawl");
+insert into svømresultat (medlem_id, stævne, placering, tid, svømmedisciplin) values (7, "VM", "Tredje", "60.32", "Rygcrawl");
+insert into svømresultat (medlem_id, stævne, placering, tid, svømmedisciplin) values (8, "DM", "Fjerde", "23.32", "Rygcrawl");
+insert into svømresultat (medlem_id, stævne, placering, tid, svømmedisciplin) values (9, "Radio 100 fm", "Første", "32.34", "Rygcrawl");
+insert into svømresultat (medlem_id, stævne, placering, tid, svømmedisciplin) values (10, "Hurtigstævnet", "Anden", "0.67", "Rygcrawl");
+insert into svømresultat (medlem_id, stævne, placering, tid, svømmedisciplin) values (3, ":)", "Sjete", "04.23", "Rygcrawl");
+insert into svømresultat (medlem_id, stævne, placering, tid, svømmedisciplin) values (2, "Mars stævnet", "Syvende", "87.34", "Butterfly");
+insert into svømresultat (medlem_id, stævne, placering, tid, svømmedisciplin) values (4, "Mads' Stævne", "Anden", "90.32", "Butterfly");
+insert into svømresultat (medlem_id, stævne, placering, tid, svømmedisciplin) values (5, "Det første stævne", "Første", "123.45", "Butterfly");
+insert into svømresultat (medlem_id, stævne, placering, tid, svømmedisciplin) values (8, "IDK stævnet", "Sidste", "123.34", "Butterfly");
+insert into svømresultat (medlem_id, stævne, placering, tid, svømmedisciplin) values (9, "Intet stævnet", "Tredje", "12.345", "Brystsvømning");
+insert into svømresultat (medlem_id, stævne, placering, tid, svømmedisciplin) values (7, "Natte stævnet", "Femte", "12.34", "Brystsvømning");
+insert into svømresultat (medlem_id, stævne, placering, tid, svømmedisciplin) values (5, "Stævne stævnet", "Sjete", "11.45", "Brystsvømning");
+insert into svømresultat (medlem_id, stævne, placering, tid, svømmedisciplin) values (6, "?", "Første", "11.44", "Brystsvømning");
+insert into svømresultat (medlem_id, stævne, placering, tid, svømmedisciplin) values (10, "OL", "Tredje", "22.67", "Brystsvømning");
+insert into svømresultat (medlem_id, stævne, placering, tid, svømmedisciplin) values (1, "SM", "Ottende", "97.45", "Brystsvømning");
