@@ -1,5 +1,6 @@
 package dellefin;
 
+import formand.MetoderForFormand;
 import formand.medlem;
 import træneren.SvømmeResultat;
 import static java.lang.System.exit;
@@ -7,13 +8,14 @@ import java.sql.SQLException;
 import java.util.Scanner;
 import kasseren.MetoderForKasseren;
 import misc.Utils;
+import træneren.MetoderForTræneren;
 
 public class controller {
 
-    private Utils myUtils;
-    private SvømmeResultat træneren;
-    private MetoderForKasseren kasseren;
-    private medlem formand;
+    private Utils myUtils = new Utils();
+    private MetoderForTræneren træneren = new MetoderForTræneren();
+    private MetoderForKasseren kasseren = new MetoderForKasseren();
+    private MetoderForFormand formand = new MetoderForFormand();
 
     void start() throws SQLException {
 

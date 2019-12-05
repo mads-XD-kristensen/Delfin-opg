@@ -1,7 +1,5 @@
 package formand;
 
-
-
 public class Konkurrent extends medlem {
 
     String træner;
